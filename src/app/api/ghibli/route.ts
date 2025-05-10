@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
     const { imageUrls, prompt, userId } = body; // Make sure to send userId from frontend
 
     console.log('imageUrls', imageUrls);
+    console.log('userId', userId);
 
     if (!imageUrls || !Array.isArray(imageUrls) || imageUrls.length === 0) {
       return NextResponse.json({ error: 'Missing imageUrls' }, { status: 400 });
