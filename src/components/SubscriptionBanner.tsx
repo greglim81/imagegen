@@ -80,8 +80,8 @@ export default function SubscriptionBanner({ daysRemaining, isSubscribed, subscr
     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-medium text-yellow-800">Free Trial Expired</h3>
-          <p className="text-yellow-600">Subscribe to continue using the service.</p>
+          <h3 className="text-lg font-medium text-yellow-800">Subscribe to Use the App</h3>
+          <p className="text-yellow-600">Get started with a 7-day free trial</p>
         </div>
         <button
           onClick={handleSubscribe}
