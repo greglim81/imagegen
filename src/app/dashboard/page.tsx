@@ -10,7 +10,7 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
 export default function Dashboard() {
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
   const router = useRouter();
   const [subscriptionStatus, setSubscriptionStatus] = useState({
     daysRemaining: 7,
@@ -19,7 +19,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/login');
+      router.push('/');
     }
   }, [user, loading, router]);
 
@@ -49,6 +49,11 @@ export default function Dashboard() {
     checkSubscription();
   }, [user]);
 
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -71,11 +76,20 @@ export default function Dashboard() {
             </div>
             <div className="flex items-center">
               <span className="text-gray-600 mr-4">{user.email}</span>
+              <span className="text-gray-600 mr-4">
+                {subscriptionStatus.isSubscribed ? 'Subscribed' : 'Not Subscribed'}
+              </span>
               <button
-                onClick={() => router.push('/')}
+                onClick={handleLogout}
                 className="text-indigo-600 hover:text-indigo-800"
               >
                 Logout
+              </button>
+              <button
+                onClick={() => router.push('/settings')}
+                className="text-indigo-600 hover:text-indigo-800 ml-4"
+              >
+                Settings
               </button>
             </div>
           </div>

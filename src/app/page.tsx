@@ -1,10 +1,21 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 import SignUp from '@/components/auth/SignUp';
 import Login from '@/components/auth/Login';
 
 export default function Home() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, loading, router]);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [showSignUp, setShowSignUp] = useState(true);
 

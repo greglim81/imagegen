@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -15,6 +15,21 @@ export default function ImageUpload() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  useEffect(() => {
+    const checkSubscription = async () => {
+      if (!user) return;
+      try {
+        const response = await fetch(`/api/create-checkout-session?userId=${user.uid}`);
+        const data = await response.json();
+        setIsSubscribed(data.isSubscribed);
+      } catch (error) {
+        console.error('Error checking subscription status:', error);
+      }
+    };
+    checkSubscription();
+  }, [user]);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -111,6 +126,7 @@ export default function ImageUpload() {
             type="file"
             accept="image/jpeg,image/png,image/gif"
             onChange={handleFileSelect}
+            disabled={!isSubscribed}
             className="w-full"
           />
           <p className="text-sm text-gray-500 mt-2">
@@ -139,7 +155,7 @@ export default function ImageUpload() {
 
         <button
           onClick={handleUpload}
-          disabled={!selectedFile || loading}
+          disabled={!isSubscribed || !selectedFile || loading}
           className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 disabled:bg-gray-400"
         >
           {loading ? 'Processing...' : 'Transform Image'}

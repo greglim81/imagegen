@@ -6,9 +6,10 @@ import { useAuth } from '@/contexts/AuthContext';
 interface SubscriptionBannerProps {
   daysRemaining: number;
   isSubscribed: boolean;
+  subscriptionStatus: string; // 'trial', 'active', 'none'
 }
 
-export default function SubscriptionBanner({ daysRemaining, isSubscribed }: SubscriptionBannerProps) {
+export default function SubscriptionBanner({ daysRemaining, isSubscribed, subscriptionStatus }: SubscriptionBannerProps) {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
@@ -27,9 +28,12 @@ export default function SubscriptionBanner({ daysRemaining, isSubscribed }: Subs
           email: user.email,
         }),
       });
-
-      const { url } = await response.json();
-      window.location.href = url;
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error('No URL returned from checkout session');
+      }
     } catch (error) {
       console.error('Error creating checkout session:', error);
     } finally {
@@ -50,14 +54,14 @@ export default function SubscriptionBanner({ daysRemaining, isSubscribed }: Subs
     );
   }
 
-  if (daysRemaining > 0) {
+  if (subscriptionStatus === 'trial' && daysRemaining > 0) {
     return (
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-medium text-blue-800">Free Trial</h3>
+            <h3 className="text-lg font-medium text-blue-800">Subscribe to Use the App (7 day free trial)</h3>
             <p className="text-blue-600">
-              {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'} remaining in your free trial
+              Free trial: {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'} remaining
             </p>
           </div>
           <button
