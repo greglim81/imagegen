@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 import { db } from '@/lib/firebaseAdmin';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
+  apiVersion: '2025-04-30.basil',
 });
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -17,8 +17,12 @@ export async function POST(req: NextRequest) {
 
     try {
       event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
-    } catch (err: any) {
-      console.error(`Webhook signature verification failed: ${err.message}`);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error(`Webhook signature verification failed: ${err.message}`);
+      } else {
+        console.error('Webhook signature verification failed: Unknown error');
+      }
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
 
@@ -73,11 +77,18 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ received: true });
-  } catch (error: any) {
-    console.error('Error processing webhook:', error);
-    return NextResponse.json(
-      { error: error.message || 'Error processing webhook' },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error processing webhook:', error);
+      return NextResponse.json(
+        { error: error.message || 'Error processing webhook' },
+        { status: 500 }
+      );
+    } else {
+      return NextResponse.json(
+        { error: 'Unknown error processing webhook' },
+        { status: 500 }
+      );
+    }
   }
 } 

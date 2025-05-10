@@ -89,8 +89,12 @@ export async function POST(req: NextRequest) {
       url: firebaseGeneratedUrl,
       daysRemaining: Math.max(0, 7 - daysSinceSignUp)
     });
-  } catch (error: any) {
-    console.error('API error:', error);
-    return NextResponse.json({ error: error.message || 'Server error' }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('API error:', error);
+      return NextResponse.json({ error: error.message || 'Server error' }, { status: 500 });
+    } else {
+      return NextResponse.json({ error: 'Unknown server error' }, { status: 500 });
+    }
   }
 } 

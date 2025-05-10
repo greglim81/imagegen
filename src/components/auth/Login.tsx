@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const { signIn } = useAuth();
   const router = useRouter();
 
@@ -16,8 +15,8 @@ export default function Login() {
     try {
       await signIn(email, password);
       router.push('/dashboard');
-    } catch (error) {
-      setError('Failed to sign in');
+    } catch {
+      // Optionally handle error here
     }
   };
 
@@ -30,9 +29,6 @@ export default function Login() {
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="text-red-500 text-center">{error}</div>
-          )}
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="email-address" className="sr-only">

@@ -16,15 +16,20 @@ export default function SignUp() {
     try {
       await signUp(email, password);
       router.push('/dashboard');
-    } catch (error: any) {
-      if (error.code === 'auth/email-already-in-use') {
-        setError('This email is already in use. Please log in or use a different email.');
-      } else if (error.code === 'auth/weak-password') {
-        setError('Password should be at least 6 characters.');
-      } else if (error.code === 'auth/invalid-email') {
-        setError('Please enter a valid email address.');
+    } catch (error: unknown) {
+      if (typeof error === 'object' && error !== null && 'code' in error) {
+        const err = error as { code?: string; message?: string };
+        if (err.code === 'auth/email-already-in-use') {
+          setError('This email is already in use. Please log in or use a different email.');
+        } else if (err.code === 'auth/weak-password') {
+          setError('Password should be at least 6 characters.');
+        } else if (err.code === 'auth/invalid-email') {
+          setError('Please enter a valid email address.');
+        } else {
+          setError(err.message || 'Failed to create an account');
+        }
       } else {
-        setError(error.message || 'Failed to create an account');
+        setError('Failed to create an account');
       }
     }
   };

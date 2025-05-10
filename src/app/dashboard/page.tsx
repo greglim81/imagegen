@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import ImageUpload from '@/components/ImageUpload';
 import GenerationGallery from '@/components/GenerationGallery';
@@ -12,7 +12,6 @@ import { doc, getDoc } from 'firebase/firestore';
 export default function Dashboard() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [subscriptionStatus, setSubscriptionStatus] = useState({
     daysRemaining: 7,
     isSubscribed: false,

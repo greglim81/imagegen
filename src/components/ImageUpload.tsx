@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
-import { AuthProvider } from '@/contexts/AuthContext';
 import ReactBeforeSliderComponent from 'react-before-after-slider-component';
 import 'react-before-after-slider-component/dist/build.css';
+import Image from 'next/image';
 
 export default function ImageUpload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -91,9 +91,13 @@ export default function ImageUpload() {
       } else {
         throw new Error(data.error || 'Failed to transform image');
       }
-    } catch (error: any) {
-      console.error('Error:', error);
-      setError(error.message || 'Failed to upload image. Please try again.');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Error:', error);
+        setError(error.message || 'Failed to upload image. Please try again.');
+      } else {
+        setError('Failed to upload image. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -123,9 +127,11 @@ export default function ImageUpload() {
         {previewUrl && (
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Original Image</h3>
-            <img
+            <Image
               src={previewUrl}
               alt="Preview"
+              width={400}
+              height={400}
               className="max-w-full h-auto rounded-lg"
             />
           </div>
