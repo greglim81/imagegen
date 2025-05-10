@@ -50,9 +50,14 @@ export async function POST(req: NextRequest) {
         const userId = subscription.metadata?.userId;
 
         if (userId) {
+          const endTimestamp =
+            subscription.cancel_at ||
+            subscription.trial_end ||
+            subscription.ended_at ||
+            null;
           await db.collection('users').doc(userId).update({
             subscriptionStatus: subscription.status,
-            subscriptionEndDate: new Date(subscription.current_period_end * 1000),
+            subscriptionEndDate: endTimestamp ? new Date(endTimestamp * 1000) : null,
           });
         }
         break;
@@ -63,10 +68,15 @@ export async function POST(req: NextRequest) {
         const userId = subscription.metadata?.userId;
 
         if (userId) {
+          const endTimestamp =
+            subscription.cancel_at ||
+            subscription.trial_end ||
+            subscription.ended_at ||
+            null;
           await db.collection('users').doc(userId).update({
             isSubscribed: false,
             subscriptionStatus: 'canceled',
-            subscriptionEndDate: new Date(subscription.current_period_end * 1000),
+            subscriptionEndDate: endTimestamp ? new Date(endTimestamp * 1000) : null,
           });
         }
         break;
