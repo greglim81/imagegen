@@ -1,0 +1,38 @@
+{
+  "name": "imagegen",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@firebase/auth": "^1.10.2",
+    "@firebase/storage": "^0.13.8",
+    "@stripe/stripe-js": "^7.3.0",
+    "firebase": "^11.7.1",
+    "firebase-admin": "^13.3.0",
+    "form-data": "^4.0.2",
+    "next": "15.3.2",
+    "node-fetch": "^3.3.2",
+    "openai": "^4.98.0",
+    "react": "^19.0.0",
+    "react-before-after-slider-component": "^1.1.8",
+    "react-dom": "^19.0.0",
+    "replicate": "^1.0.1",
+    "stripe": "^18.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
