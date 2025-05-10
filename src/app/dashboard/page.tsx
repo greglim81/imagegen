@@ -15,6 +15,7 @@ export default function Dashboard() {
   const [subscriptionStatus, setSubscriptionStatus] = useState({
     daysRemaining: 7,
     isSubscribed: false,
+    subscriptionStatus: 'none' as 'trial' | 'active' | 'none'
   });
 
   useEffect(() => {
@@ -39,6 +40,7 @@ export default function Dashboard() {
           setSubscriptionStatus({
             daysRemaining: Math.max(0, 7 - daysSinceSignUp),
             isSubscribed: userData.isSubscribed || false,
+            subscriptionStatus: userData.isSubscribed ? 'active' : daysSinceSignUp < 7 ? 'trial' : 'none'
           });
         }
       } catch (error) {
@@ -101,6 +103,7 @@ export default function Dashboard() {
           <SubscriptionBanner
             daysRemaining={subscriptionStatus.daysRemaining}
             isSubscribed={subscriptionStatus.isSubscribed}
+            subscriptionStatus={subscriptionStatus.subscriptionStatus}
           />
 
           <div className="bg-white rounded-lg shadow p-6 mb-8">
