@@ -13,17 +13,7 @@ export async function POST(req: NextRequest) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'Ghibli Style Generator Subscription',
-              description: 'Monthly subscription for unlimited image transformations',
-            },
-            unit_amount: 1900, // $19.00
-            recurring: {
-              interval: 'month',
-            },
-          },
+          price: 'price_1RN6vQGtOjTLFsRIpyTBDti2',
           quantity: 1,
         },
       ],
