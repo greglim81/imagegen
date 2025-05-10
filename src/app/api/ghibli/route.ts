@@ -1,3 +1,4 @@
+export const runtime = 'nodejs';
 import { NextRequest, NextResponse } from 'next/server';
 import Replicate from 'replicate';
 import { db, adminStorage } from '@/lib/firebaseAdmin'; // adjust path as needed
